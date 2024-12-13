@@ -8,8 +8,8 @@ module.exports = {
   bootstrap({ strapi }) {
     var io = require("socket.io")(strapi.server.httpServer, {
       cors: {
-        origin: "http://localhost:3000",
-        // origin: "https://react-demo-7a31.onrender.com",
+        // origin: "http://localhost:3000",
+        origin: "https://two025-react.onrender.com",
 
 
         methods: ["GET", "POST"],
