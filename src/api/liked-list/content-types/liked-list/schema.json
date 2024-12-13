@@ -1,0 +1,24 @@
+{
+  "kind": "collectionType",
+  "collectionName": "liked_lists",
+  "info": {
+    "singularName": "liked-list",
+    "pluralName": "liked-lists",
+    "displayName": "LikedList"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "likedBy": {
+      "type": "string"
+    },
+    "post": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::post.post",
+      "inversedBy": "liked_lists"
+    }
+  }
+}
