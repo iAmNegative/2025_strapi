@@ -2,26 +2,25 @@
 const { default: axios } = require("axios");
 
 module.exports = {
-
   register({ strapi }) {},
-  
+
   bootstrap({ strapi }) {
-    var io = require("socket.io")(strapi.server.httpServer, {
+    const io = require("socket.io")(strapi.server.httpServer, {
       cors: {
-        // origin: "http://localhost:3000",
-        origin: "https://two025-react.onrender.com",
-
-
+        origin: ["http://localhost:3000", "https://two025-react.onrender.com"],
         methods: ["GET", "POST"],
         allowedHeaders: ["my-custom-header"],
         credentials: true,
       },
     });
 
-    io.on("connection", function (socket) {
+    io.on("connection", (socket) => {
+      console.log("New client connected");
+
+      // Event: User joins a group
       socket.on("join", ({ username }) => {
-        console.log("user connected");
-        console.log("username is ", username);
+        console.log("User connected:", username);
+
         if (username) {
           socket.join("group");
           socket.emit("welcome", {
@@ -30,48 +29,56 @@ module.exports = {
             userData: username,
           });
         } else {
-          console.log("An error occurred");
+          console.error("Error: Username is required to join.");
         }
       });
 
+      // Event: Send a message
       socket.on("sendMessage", async (data) => {
-        const uniqueId = data.receiverUser;
-        io.emit(uniqueId, {
-          receiverUser: data.receiverUser
-        }, (error) => {// Sending the message to the backend
-          if (error) {
-          }
-        });
-
+        try {
+          const uniqueId = data.receiverUser;
+          io.emit(uniqueId, { receiverUser: data.receiverUser });
+          console.log("Message sent to:", uniqueId);
+        } catch (error) {
+          console.error("Error handling sendMessage event:", error.message);
+        }
       });
+
+      // Event: Find location request
+      socket.on("findLocationSend", async (data) => {
+        try {
+          const { targetUser, senderUser } = data;
+
+          // Notify the target user to send their coordinates
+          const senderUser1 = data.senderUser;
+          const targetUser1 = data.targetUser;
+
+          io.emit("findCord", { targetUser1, senderUser1 });
+          console.log(`findLocationSend: Target user ${targetUser1}, Sender user ${senderUser1}`);
+        } catch (error) {
+          console.error("Error handling findLocationSend event:", error.message);
+        }
+      });
+
+      // Event: Target user sends coordinates
+      socket.on("sendCordSend", async (data) => {
+        try {
+          const { senderUser1,targetUser1, lan,long } = data;
+          
+          console.log(
+            `sendCordSend: Sender ${senderUser1}, Coordinates (${lan}, ${long})`
+          );
+
+          // Notify the sender user with the target user's coordinates
+          io.emit("sendCordToSender", { senderUser1, long, lan });
+          console.log(
+            `sendCordSend: Sender ${senderUser1}, Coordinates (${lan}, ${long})`
+          );
+        } catch (error) {
+          console.error("Error handling sendCordSend event:", error.message);
+        }
+      });
+
     });
   },
 };
-
-const https = require('https');
-
-exports.handler = async (event, context) => {
- const url = 'https://yoursitehere.onrender.com';
-
- return new Promise((resolve, reject) => {
-   const req = https.get(url, (res) => {
-     if (res.statusCode === 200) {
-       resolve({
-         statusCode: 200,
-         body: 'Server pinged successfully',
-       });
-     } else {
-       reject(
-         new Error(`Server ping failed with status code: ${res.statusCode}`)
-       );
-     }
-   });
-
-   req.on('error', (error) => {
-     reject(error);
-   });
-
-   req.end();
- });
-};
-
