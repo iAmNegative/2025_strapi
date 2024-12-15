@@ -46,6 +46,8 @@ module.exports = {
 
       // Event: Find location request
       socket.on("findLocationSend", async (data) => {
+        console.log(` request code 1 :  recived to server `);
+
         try {
           const { targetUser, senderUser } = data;
 
@@ -54,7 +56,9 @@ module.exports = {
           const targetUser1 = data.targetUser;
 
           io.emit("findCord", { targetUser1, senderUser1 });
-          console.log(`findLocationSend: Target user ${targetUser1}, Sender user ${senderUser1}`);
+          console.log(` request code 2 :  send to user server ${targetUser1}`);
+
+          // console.log(`findLocationSend: Target user ${targetUser1}, Sender user ${senderUser1}`);
         } catch (error) {
           console.error("Error handling findLocationSend event:", error.message);
         }
@@ -62,12 +66,14 @@ module.exports = {
 
       // Event: Target user sends coordinates
       socket.on("sendCordSend", async (data) => {
+
+
         try {
           const { senderUser1,targetUser1, lan,long } = data;
           
-          console.log(
-            `sendCordSend: Sender ${senderUser1}, Coordinates (${lan}, ${long})`
-          );
+          console.log(` request code 3 :  recived to server : lan ${lan} ,  ${long} to  ${senderUser1} `);
+
+          // console.log(`sendCordSend: Sender ${senderUser1}, Coordinates (${lan}, ${long})`);
 
           // Notify the sender user with the target user's coordinates
           io.emit("sendCordToSender", { senderUser1, long, lan });
