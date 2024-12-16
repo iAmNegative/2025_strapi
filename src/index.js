@@ -76,7 +76,7 @@ module.exports = {
           // console.log(`sendCordSend: Sender ${senderUser1}, Coordinates (${lan}, ${long})`);
 
           // Notify the sender user with the target user's coordinates
-          io.emit("sendCordToSender", { senderUser1, long, lan });
+          io.emit("sendCordToSender", { senderUser1,targetUser1, long, lan });
           console.log(
             `sendCordSend: Sender ${senderUser1}, Coordinates (${lan}, ${long})`
           );
