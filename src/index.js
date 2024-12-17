@@ -1,6 +1,7 @@
 "use strict";
 const { default: axios } = require("axios");
 
+
 module.exports = {
   register({ strapi }) {},
 
@@ -84,6 +85,24 @@ module.exports = {
           console.error("Error handling sendCordSend event:", error.message);
         }
       });
+
+      const usersOnline = new Set();
+
+      io.on('connection', (socket) => {
+        // Assuming you have some way to identify the user
+        const userId = socket.handshake.query.userId;
+        usersOnline.add(userId);
+
+        // Notify everyone when a user is online
+        io.emit('user-online', userId);
+
+        socket.on('disconnect', () => {
+          usersOnline.delete(userId);
+          io.emit('user-offline', userId);
+        });
+      });
+
+
 
     });
   },
