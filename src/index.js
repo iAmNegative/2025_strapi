@@ -70,14 +70,14 @@ module.exports = {
 
 
         try {
-          const { senderUser1,targetUserName, lan,long } = data;
+          const { senderUser1,targetUser1, lan,long } = data;
           
           console.log(` request code 3 :  recived to server : lan ${lan} ,  ${long} to  ${senderUser1} `);
 
           // console.log(`sendCordSend: Sender ${senderUser1}, Coordinates (${lan}, ${long})`);
 
           // Notify the sender user with the target user's coordinates
-          io.emit("sendCordToSender", { senderUser1,targetUserName, long, lan });
+          io.emit("sendCordToSender", { senderUser1,targetUser1, long, lan });
           console.log(
             `sendCordSend: Sender ${senderUser1}, Coordinates (${lan}, ${long})`
           );
