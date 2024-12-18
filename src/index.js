@@ -57,7 +57,8 @@ module.exports = {
           const targetUser1 = data.targetUser;
 
           io.emit("findCord", { targetUser1, senderUser1 });
-          console.log(` request code 2 :  send to user server ${targetUser1}`);
+
+          console.log(`Step 2 = location request sending to targetUser  ${targetUser1}`  );
 
           // console.log(`findLocationSend: Target user ${targetUser1}, Sender user ${senderUser1}`);
         } catch (error) {
@@ -72,15 +73,15 @@ module.exports = {
         try {
           const { senderUser1,targetUser1, lan,long } = data;
           
-          console.log(` request code 3 :  recived to server : lan ${lan} ,  ${long} to  ${senderUser1} `);
+          console.log(`Step 6 =  ${targetUser1}s location sending to  ${senderUser1} `  );  
 
           // console.log(`sendCordSend: Sender ${senderUser1}, Coordinates (${lan}, ${long})`);
 
           // Notify the sender user with the target user's coordinates
-          io.emit("sendCordToSender", { senderUser1,targetUser1, long, lan });
-          console.log(
-            `sendCordSend: Sender ${senderUser1}, Coordinates (${lan}, ${long})`
-          );
+          io.emit("sendCordToSender", { senderUser1,targetUser1,  lan, long });
+          
+          console.log(`Step 7 =  ${targetUser1}  ${lan} and  ${long} location  sending to  ${senderUser1} `  );  
+
         } catch (error) {
           console.error("Error handling sendCordSend event:", error.message);
         }
