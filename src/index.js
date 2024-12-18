@@ -86,21 +86,24 @@ module.exports = {
         }
       });
 
-      const usersOnline = new Set();
+      socket.on("UserOnline", async (data) => {
+        try {
+          const { userId  } = data;
+          
+          // console.log(` request code 3 :  recived to server : lan `);
 
-      io.on('connection', (socket) => {
-        // Assuming you have some way to identify the user
-        const userId = socket.handshake.query.userId;
-        usersOnline.add(userId);
+          // console.log(`sendCordSend: Sender ${senderUser1}, Coordinates (${lan}, ${long})`);
 
-        // Notify everyone when a user is online
-        io.emit('user-online', userId);
-
-        socket.on('disconnect', () => {
-          usersOnline.delete(userId);
-          io.emit('user-offline', userId);
-        });
+          // Notify the sender user with the target user's coordinates
+          io.emit("UserOnline", { userId });
+          // console.log(
+          //   // `sendCordSend: Sender ${senderUser1}, Coordinates (${lan}, ${long})`
+          // );
+        } catch (error) {
+          console.error("Error handling sendCordSend event:", error.message);
+        }
       });
+      
 
 
 
