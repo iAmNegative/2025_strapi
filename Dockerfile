@@ -9,9 +9,6 @@ RUN npm install
 # Copy the rest of the application files
 COPY . .
 
-# Build the Strapi project
-RUN npm run build
-
 # Expose the Strapi port
 EXPOSE 1337
 
